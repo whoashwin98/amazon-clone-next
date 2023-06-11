@@ -2,11 +2,29 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/solid";
 import Currency from "react-currency-formatter";
+import { useDispatch } from "react-redux";
+import { addToBasket } from "../slices/basketSlice";
 
 const MAX_RATING = 5;
 const MIN_RATING = 3;
 
 const Product = ({ id, title, price, description, category, image }) => {
+  const dispatch = useDispatch();
+
+  const addItemToCart = () => {
+    const product = {
+      id,
+      title,
+      price,
+      description,
+      category,
+      image,
+      rating,
+      hasPrime,
+    };
+    dispatch(addToBasket(product));
+  };
+
   const [rating] = useState(
     Math.floor(Math.random() * (MAX_RATING - MIN_RATING + 1) + MIN_RATING)
   );
@@ -31,7 +49,7 @@ const Product = ({ id, title, price, description, category, image }) => {
         <Currency quantity={price} currency="USD" />
       </div>
       {hasPrime && (
-        <div className="flex items-center space-x-2 -mt-3">
+        <div className="flex items-center space-x-2 -mt-3 mb-5">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Prime_logo.png?20180219133124"
             className="w-12"
@@ -39,7 +57,9 @@ const Product = ({ id, title, price, description, category, image }) => {
           <p className="text-xs text-gray-500">FREE Next Day Delivery</p>
         </div>
       )}
-      <button className="mt-auto button">Add To Cart</button>
+      <button onClick={addItemToCart} className="mt-auto button">
+        Add To Cart
+      </button>
     </div>
   );
 };
