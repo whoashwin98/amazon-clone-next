@@ -19,12 +19,14 @@ export default function Home({ products }) {
 }
 
 export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
   const response = await fetch("https://fakestoreapi.com/products");
   const products = await response.json();
 
   return {
     props: {
       products,
+      session,
     },
   };
 };
